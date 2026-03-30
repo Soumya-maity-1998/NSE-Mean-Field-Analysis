@@ -1,0 +1,68 @@
+# =========================
+# Fortran Build Files
+# =========================
+*.o
+*.obj
+*.mod
+*.smod
+*.a
+*.lib
+*.dll
+*.exe
+*.out
+
+# =========================
+# Debug / Temp Files
+# =========================
+*.pdb
+*.ilk
+*.idb
+*.log
+*.tmp
+*.tlog
+
+# =========================
+# Visual Studio Files
+# =========================
+.vs/
+*.vcxproj.user
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build directories
+Debug/
+Release/
+x64/
+x86/
+NSE_Observables_23_DEC/
+Bound Output/
+First_Workspace_aug/
+CELSIUS/
+NSE_Mean_Field/
+NSE_xheavy Output/
+NSE Observables1 bounds and heavy/
+NSE_Old_Binding Energy/
+
+# =========================
+# Intel Fortran (if used)
+# =========================
+*.optrpt
+*.i
+*.ipdb
+*.iobj
+
+# =========================
+# Backup / Misc
+# =========================
+*.bak
+*.old
+*.orig
+*.swp
+
+# =========================
+# OS Files
+# =========================
+.DS_Store
+Thumbs.db
