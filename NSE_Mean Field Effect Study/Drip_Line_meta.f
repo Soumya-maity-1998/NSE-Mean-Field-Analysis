@@ -1,5 +1,7 @@
 cccc  Grand canonical model for neutron and proton
-cccc	Date-02.04.2019
+cccc	Original Date-02.04.2019 
+c	For Mean Field : 06.04.2026
+
       implicit real *8 (a-h, o-z)
 
 	dimension yy(0:1000, 0:1000), fee(0:1000, 0:1000)
@@ -8,18 +10,18 @@ cccc	Date-02.04.2019
 	dimension etap_c(0:1000, 0:1000), etan_c(0:1000, 0:1000)
 
       open(unit = 4, file = 'limz_.out', status = 'unknown')
-	open(unit = 15, file = 'Mass_Fraction4_vs_rhoB_test.out', 
+	open(unit = 15, file = 'Mass_Fraction4_vs_Temp_NoMeanField.out', 
 	1status = 'unknown')
-	open(unit = 35, file = 'Bound4_vs_rhoB_test.out', 
+	open(unit = 35, file = 'Bound4_vs_Temp_NoMeanField.out', 
 	1status = 'unknown')
-	open(unit = 10,file = 'Density4_vs_rhoB_yp=0.2_Temp=5_test.out',
-     1status = 'unknown')
-	open(unit = 12, file = 'isotopic4_rhoB_dependence_yp=0.2_Temp=5_
-	1test.out', status = 'unknown')
-	open(unit = 13, file = 'Hydrogen_isotope4_rhoB_test.out', status 
-	1 = 'unknown') 
-	open(unit = 14, file = "Helium_isotope4_rhoB_test.out", status = 
-	1'unknown')
+	open(unit = 10,file= 'Density4_vs_Temp_yp=0.2_rhoB=0.1_NoMeanField
+     1.out',status = 'unknown')
+	open(unit = 12, file = 'isotopic4_Temp_dependence_yp=0.2_rhoB=0.1_
+	1NoMeanField.out', status = 'unknown')
+	open(unit = 13, file = 'Hydrogen_isotope4_Temp_NoMeanField.out',  
+	1 status = 'unknown') 
+	open(unit = 14, file = "Helium_isotope4_Temp_NoMeanField.out",  
+	1status = 'unknown')
       
 	open(unit = 20, file = 'BE_vs_Z_at_a=100.txt', status = 'unknown')
 
@@ -68,7 +70,7 @@ c	numz=28.0d0
 c
 
 
-cccc ------------------------------------------------------------------ 
+cccc ------------------------------------------------------------------
 cccc  Maximum possible proton and neutron in a cluster are 100 and 300
 cccc ------------------------------------------------------------------
       numzmax = 100
@@ -90,7 +92,7 @@ cccc	Temperature and electron density are zero during dripline calculation only
 	do i = 20, 95
 	z  = a - dfloat(i) 
 	
-	call binding(a, z, temp0, rho_electron0, be1,etap,etan)
+	call binding(a, z, temp0, rho_electron0, be1, etap, etan)
 	write(20, '(i7, f10.4)') i, be1/a 
 	end do
 
@@ -100,7 +102,7 @@ cccc	Temperature and electron density are zero during dripline calculation only
       diz = dfloat(iz)
       iamin = nint(diz*1.2)
  31   amin = dfloat(iamin)
-      call binding(amin,diz,temp0, rho_electron0,res1, etapc, etanc)
+      call binding(amin, diz, temp0, rho_electron0, res1, etapc, etanc)
       daless = amin - 1.0d0
       dzless = diz - 1.0d0
       call binding(daless,dzless,temp0,rho_electron0,res2,etapc,etanc)
@@ -112,10 +114,10 @@ cccc	Temperature and electron density are zero during dripline calculation only
       iamax = iamin
  34   continue     
       amax = dfloat(iamax)
-      call binding(amax,diz,temp0, rho_electron0,res1,etap,etan)
+      call binding(amax, diz, temp0, rho_electron0, res1, etap, etan)
       dmore = amax + 1.0
       
-      call binding(dmore,diz,temp0, rho_electron0,res2,etap,etan)
+      call binding(dmore, diz, temp0, rho_electron0, res2, etap, etan)
       if(res1.le.res2) goto 35
       iamax = iamax + 1
 	inmax = iamax - iz
@@ -157,20 +159,20 @@ cccc ------------------------------------------------------------------
 
 	numa = 2000
 	dyp = 0.01d0  
-	do iyp = 0, 0  ! end point = 0, 50
+	do iyp = 0, 0  ! end point = 0, 59
 	proton_frac = 0.2d0
 	proton_frac = proton_frac - dyp*dfloat(iyp) 
 	numz = nint(dfloat(numa)*proton_frac)
 	numn = numa - numz
 
-	tempi = 5.0d0
+	tempi = 16.0d0
 
-      do itemp = 1, 1
+      do itemp = 1, 131
 	temp = tempi - dfloat(itemp - 1)*0.1d0
 
-	do idens = 50, 10, -1
-c      dens_ratio = 0.1d0
-	dens_ratio = 10.0d0**(-0.1d0*dfloat(idens))
+	do idens = 0, 0 !50, 10, -1
+      dens_ratio = 0.1d0
+c	dens_ratio = 10.0d0**(-0.1d0*dfloat(idens))
 	volf_ratio = 1.0d0/dens_ratio
 cccc -------------------------------------------------------------------
 	vol = volf_ratio*dfloat(numa)/0.1604d0
@@ -237,7 +239,7 @@ cccc -------------------------------------------------------------------
       dn_H7 = 5.0d0
 	da_H7 = dz_H7 + dn_H7
       spin_H7 = 2.0
-	call seitz_lightnuclei(da_H7,dz_H7,rho_electron,seitz_corr_H7)
+	call seitz_lightnuclei(da_H7, dz_H7, rho_electron, seitz_corr_H7)
       bind_H7 = -6.580 - seitz_corr_H7
       fee(1, 6) = -bind_H7/temp + dlog(spin_H7)
 
@@ -245,14 +247,14 @@ cccc -------------------------------------------------------------------
       dn_he3 = 1.0d0
 	da_he3 = dz_he3 + dn_he3
       spin_he3 = 2.0
-	call seitz_lightnuclei(da_he3,dz_he3,rho_electron,seitz_corr_he3)
+	call seitz_lightnuclei(da_he3, dz_he3,rho_electron,seitz_corr_he3)
       bind_he3 = -7.718 - seitz_corr_he3
       fee(2, 1) = -bind_he3/temp + dlog(spin_he3)
 
 	dz_he4 = 2.0d0
       dn_he4 = 2.0d0
 	da_he4 = dz_he4 + dn_he4
-	call seitz_lightnuclei(da_he4,dz_he4,rho_electron,seitz_corr_he4)
+	call seitz_lightnuclei(da_he4, dz_he4,rho_electron,seitz_corr_he4)
       bind_he4 = -28.296 - seitz_corr_he4
       fee(2, 2) = -bind_he4/temp 
 
@@ -321,7 +323,7 @@ cccc -------------------------------------------------------------------
 	end do
 
 	iter = 0
-	emassp = dmass
+	emassp = dmass	  ! Effective masses of proton and neutron
 	emassn = dmass
 	potfp = 0.0d0
 	potfn = 0.0d0
@@ -330,7 +332,7 @@ ccc  -----------------------------------------------------
 200   continue
       iter = iter + 1
 c	write(*,*)iter
-	sumn = 0.0d0;    sumz = 0.0d0
+	sumn = 0.0d0;		sumz = 0.0d0
 	derivnn = 0.0d0;	derivnz = 0.0d0
 	derivzz = 0.0d0;    derivzn = 0.0d0
 	sum_clust = 0.0d0
@@ -402,9 +404,9 @@ c	  if(iz.eq.in) then
 	  fee_gas_cor = ((fee_gas_cor1+fee_gas_cor2+fee_gas_cor3)*da)/rho	
 	  fee_eff = fee(iz, in) + fee_gas_cor
 	  end if
-	  termsumn = univ3by2*(dmass**1.5d0)*dn*((dz+dn)**1.5d0)
+	  termsumn = univ3by2*(dmass**1.5d0)*dn*((dz + dn)**1.5d0)
 	1*exp((dn*(etan+(potfn/temp)))+(dz*(etap+(potfp/temp)))+fee_eff)
-	  termsumz=univ3by2*(dmass**1.5d0)*dz*((dz+dn)**1.5d0)
+	  termsumz=univ3by2*(dmass**1.5d0)*dz*((dz + dn)**1.5d0)
 	1*exp((dn*(etan+(potfn/temp)))+(dz*(etap+(potfp/temp)))+fee_eff)
 	  sumn = sumn + termsumn
 	  sumz = sumz + termsumz
@@ -420,7 +422,7 @@ c	  if(iz.eq.in) then
 	  derivnz = derivnz + termderivnz
 	  derivzn = derivzn + termderivzn
 	  derivzz = derivzz + termderivzz
-	  termsum_clust=univ3by2*(dmass**1.5d0)*((dz+dn)**2.5d0)
+	  termsum_clust = univ3by2*(dmass**1.5d0)*((dz + dn)**2.5d0)
 	1*exp((dn*(etan+(potfn/temp)))+(dz*(etap+(potfp/temp)))+fee_eff)
 
 	  sum_clust = sum_clust + termsum_clust
@@ -497,7 +499,7 @@ c	  if(iz.eq.in) then
 	  fee_eff = fee(iz, in)
 	  else if(iz.eq.1.and.in.eq.3) then	   
 	  fee_eff = fee(iz, in)
-	  else if(iz.eq.1.and.in.eq.4) then	   
+	    else if(iz.eq.1.and.in.eq.4) then	   
 	  fee_eff=fee(iz,in)
 	   else if(iz.eq.1.and.in.eq.5) then	   
 	  fee_eff=fee(iz,in)
@@ -526,9 +528,9 @@ c	  if(iz.eq.in) then
         rho = rho_0*(1.0d0 - (3.0d0*para_Lsym*delta2)/
 	1(para_Ksat + para_Ksym*delta2))
 	  rhopc = (rho*diz)/dia
-	  rhonc = rho - rhopc
-	  fee_gas_cor1 = -((2.0d0/3.0d0)*(dkin_n + dkin_p))/temp
-	  fee_gas_cor2 = poten_dens/temp
+	   rhonc = rho - rhopc
+	   fee_gas_cor1 = -((2.0d0/3.0d0)*(dkin_n + dkin_p))/temp
+	   fee_gas_cor2 = poten_dens/temp
 	  fee_gas_cor3n = rhofn*etan
 	  fee_gas_cor3p = rhofp*etap
 	  fee_gas_cor3 = fee_gas_cor3p + fee_gas_cor3n
@@ -602,8 +604,8 @@ c	  end if
 	end do 
 
 
-	write(13, 111) dens_ratio, H2, H3, H5, H7 
-	write(14, 111) dens_ratio, He4, He6, He8, He10 
+	write(13, 111) proton_frac, H2, H3, H5, H7 
+	write(14, 111) proton_frac, He4, He6, He8, He10 
 
 111	format(5e12.6)			 
 
@@ -636,7 +638,7 @@ c	  end if
 	a_bound = sum2/sum0
 	aI_bound = sum3/sum0 
 
-	write(35, 123) dens_ratio, z_bound, a_bound, aI_bound 
+	write(35, 123) proton_frac, z_bound, a_bound, aI_bound 
 123	format(4f12.6) 
 
 
@@ -675,7 +677,7 @@ c	  end if
 	xlight_heavy = (sumH + sumHe)/sum2 
 	x_heavy = sum1/sum2 
 
-	write(15, 1000) dens_ratio, xp_heavy, xn_heavy, xlight_heavy, 
+	write(15, 1000) proton_frac, xp_heavy, xn_heavy, xlight_heavy, 
 	1x_heavy
 
 
@@ -703,7 +705,7 @@ c	  end if
           end if				  
       end do
 
-	write(10, 1000) dens_ratio, free_proton/vol, free_neutron/vol,
+	write(10, 1000) proton_frac, free_proton/vol, free_neutron/vol,
 	1hydrogen_helium/vol, heavy_nucleus/vol
                             
 

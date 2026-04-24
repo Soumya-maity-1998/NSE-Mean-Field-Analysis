@@ -35,6 +35,7 @@ NULL=nul
 !ENDIF 
 ################################################################################
 # Begin Project
+# PROP Target_Last_Scanned "NSE_Mean Field Effect Study - Win32 Debug"
 RSC=rc.exe
 F90=fl32.exe
 
@@ -53,10 +54,18 @@ F90=fl32.exe
 OUTDIR=.\Release
 INTDIR=.\Release
 
-ALL : 
+ALL : "$(OUTDIR)\NSE_Mean Field Effect Study.exe"
 
 CLEAN : 
-	-@erase 
+	-@erase ".\Release\NSE_Mean Field Effect Study.exe"
+	-@erase ".\Release\Mean_Field.obj"
+	-@erase ".\Release\SLy5_Model_parameters.mod"
+	-@erase ".\Release\Wigner_Seitz.obj"
+	-@erase ".\Release\Binding_Energy_MetaModelling.obj"
+	-@erase ".\Release\FERMI_subroutine.obj"
+	-@erase ".\Release\SLy5_Parameters.obj"
+	-@erase ".\Release\Drip_Line_meta.obj"
+	-@erase ".\Release\Eta_inverse.obj"
 
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
@@ -78,7 +87,20 @@ LINK32=link.exe
 LINK32_FLAGS=kernel32.lib /nologo /subsystem:console /incremental:no\
  /pdb:"$(OUTDIR)/NSE_Mean Field Effect Study.pdb" /machine:I386\
  /out:"$(OUTDIR)/NSE_Mean Field Effect Study.exe" 
-LINK32_OBJS=
+LINK32_OBJS= \
+	"$(INTDIR)/Mean_Field.obj" \
+	"$(INTDIR)/Wigner_Seitz.obj" \
+	"$(INTDIR)/Binding_Energy_MetaModelling.obj" \
+	"$(INTDIR)/FERMI_subroutine.obj" \
+	"$(INTDIR)/SLy5_Parameters.obj" \
+	"$(INTDIR)/Drip_Line_meta.obj" \
+	"$(INTDIR)/Eta_inverse.obj"
+
+"$(OUTDIR)\NSE_Mean Field Effect Study.exe" : "$(OUTDIR)" $(DEF_FILE)\
+ $(LINK32_OBJS)
+    $(LINK32) @<<
+  $(LINK32_FLAGS) $(LINK32_OBJS)
+<<
 
 !ELSEIF  "$(CFG)" == "NSE_Mean Field Effect Study - Win32 Debug"
 
@@ -95,10 +117,20 @@ LINK32_OBJS=
 OUTDIR=.\Debug
 INTDIR=.\Debug
 
-ALL : 
+ALL : "$(OUTDIR)\NSE_Mean Field Effect Study.exe"
 
 CLEAN : 
-	-@erase 
+	-@erase ".\Debug\NSE_Mean Field Effect Study.exe"
+	-@erase ".\Debug\Mean_Field.obj"
+	-@erase ".\Debug/SLy5_Model_parameters.mod"
+	-@erase ".\Debug\Eta_inverse.obj"
+	-@erase ".\Debug\Binding_Energy_MetaModelling.obj"
+	-@erase ".\Debug\SLy5_Parameters.obj"
+	-@erase ".\Debug\Wigner_Seitz.obj"
+	-@erase ".\Debug\FERMI_subroutine.obj"
+	-@erase ".\Debug\Drip_Line_meta.obj"
+	-@erase ".\Debug\NSE_Mean Field Effect Study.ilk"
+	-@erase ".\Debug\NSE_Mean Field Effect Study.pdb"
 
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
@@ -121,7 +153,20 @@ LINK32=link.exe
 LINK32_FLAGS=kernel32.lib /nologo /subsystem:console /incremental:yes\
  /pdb:"$(OUTDIR)/NSE_Mean Field Effect Study.pdb" /debug /machine:I386\
  /out:"$(OUTDIR)/NSE_Mean Field Effect Study.exe" 
-LINK32_OBJS=
+LINK32_OBJS= \
+	"$(INTDIR)/Mean_Field.obj" \
+	"$(INTDIR)/Eta_inverse.obj" \
+	"$(INTDIR)/Binding_Energy_MetaModelling.obj" \
+	"$(INTDIR)/SLy5_Parameters.obj" \
+	"$(INTDIR)/Wigner_Seitz.obj" \
+	"$(INTDIR)/FERMI_subroutine.obj" \
+	"$(INTDIR)/Drip_Line_meta.obj"
+
+"$(OUTDIR)\NSE_Mean Field Effect Study.exe" : "$(OUTDIR)" $(DEF_FILE)\
+ $(LINK32_OBJS)
+    $(LINK32) @<<
+  $(LINK32_FLAGS) $(LINK32_OBJS)
+<<
 
 !ENDIF 
 
@@ -146,6 +191,138 @@ LINK32_OBJS=
 
 !ENDIF 
 
+################################################################################
+# Begin Source File
+
+SOURCE=.\Binding_Energy_MetaModelling.f
+
+!IF  "$(CFG)" == "NSE_Mean Field Effect Study - Win32 Release"
+
+NODEP_F90_BINDI=\
+	".\Release\SLy5_Model_parameters.mod"\
+	
+
+"$(INTDIR)\Binding_Energy_MetaModelling.obj" : $(SOURCE) "$(INTDIR)"\
+ "$(INTDIR)\SLy5_Model_parameters.mod"
+
+
+!ELSEIF  "$(CFG)" == "NSE_Mean Field Effect Study - Win32 Debug"
+
+NODEP_F90_BINDI=\
+	".\Debug/SLy5_Model_parameters.mod"\
+	
+
+"$(INTDIR)\Binding_Energy_MetaModelling.obj" : $(SOURCE) "$(INTDIR)"\
+ "$(INTDIR)\sly5_model_parameters.mod"
+
+
+!ENDIF 
+
+# End Source File
+################################################################################
+# Begin Source File
+
+SOURCE=.\Drip_Line_meta.f
+
+"$(INTDIR)\Drip_Line_meta.obj" : $(SOURCE) "$(INTDIR)"
+
+
+# End Source File
+################################################################################
+# Begin Source File
+
+SOURCE=.\Eta_inverse.f
+
+"$(INTDIR)\Eta_inverse.obj" : $(SOURCE) "$(INTDIR)"
+
+
+# End Source File
+################################################################################
+# Begin Source File
+
+SOURCE=.\FERMI_subroutine.f
+
+"$(INTDIR)\FERMI_subroutine.obj" : $(SOURCE) "$(INTDIR)"
+
+
+# End Source File
+################################################################################
+# Begin Source File
+
+SOURCE=.\Mean_Field.f
+
+!IF  "$(CFG)" == "NSE_Mean Field Effect Study - Win32 Release"
+
+NODEP_F90_MEAN_=\
+	".\Release\SLy5_Model_parameters.mod"\
+	
+
+"$(INTDIR)\Mean_Field.obj" : $(SOURCE) "$(INTDIR)"\
+ "$(INTDIR)\SLy5_Model_parameters.mod"
+
+
+!ELSEIF  "$(CFG)" == "NSE_Mean Field Effect Study - Win32 Debug"
+
+DEP_F90_MEAN_=\
+	".\Debug/SLy5_Model_parameters.mod"\
+	
+
+"$(INTDIR)\Mean_Field.obj" : $(SOURCE) $(DEP_F90_MEAN_) "$(INTDIR)"\
+ "$(INTDIR)\sly5_model_parameters.mod"
+
+
+!ENDIF 
+
+# End Source File
+################################################################################
+# Begin Source File
+
+SOURCE=.\SLy5_Parameters.f
+
+!IF  "$(CFG)" == "NSE_Mean Field Effect Study - Win32 Release"
+
+F90_MODOUT=\
+	"SLy5_Model_parameters"
+
+
+BuildCmds= \
+	$(F90) $(F90_PROJ) $(SOURCE) \
+	
+
+"$(INTDIR)\SLy5_Parameters.obj" : $(SOURCE) "$(INTDIR)"
+   $(BuildCmds)
+
+"$(INTDIR)\SLy5_Model_parameters.mod" : $(SOURCE) "$(INTDIR)"
+   $(BuildCmds)
+
+!ELSEIF  "$(CFG)" == "NSE_Mean Field Effect Study - Win32 Debug"
+
+F90_MODOUT=\
+	"SLy5_Model_parameters"
+
+
+BuildCmds= \
+	$(F90) $(F90_PROJ) $(SOURCE) \
+	
+
+"$(INTDIR)\SLy5_Parameters.obj" : $(SOURCE) "$(INTDIR)"
+   $(BuildCmds)
+
+"$(INTDIR)\sly5_model_parameters.mod" : $(SOURCE) "$(INTDIR)"
+   $(BuildCmds)
+
+!ENDIF 
+
+# End Source File
+################################################################################
+# Begin Source File
+
+SOURCE=.\Wigner_Seitz.f
+
+"$(INTDIR)\Wigner_Seitz.obj" : $(SOURCE) "$(INTDIR)"
+
+
+# End Source File
 # End Target
 # End Project
 ################################################################################
