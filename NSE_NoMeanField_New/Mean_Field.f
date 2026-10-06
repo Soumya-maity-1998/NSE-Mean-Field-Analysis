@@ -111,21 +111,22 @@ cccc  Calculating the Nuclear Potential
 	pot_n = pot1 + pot2 + pot3 + pot4n + pot5n + potn_eff
 
 ccc   Calculating potential energy density
-	vpot0=v0_is+v0_iv*(delta**2.0d0)
-	vpot1=(v1_is+v1_iv*(delta**2.0d0))*x
-	vpot2=(1.0d0/2.0d0)*(v2_is+v2_iv*(delta**2.0d0))*x*x
-	vpot3=(1.0d0/6.0d0)*(v3_is+v3_iv*(delta**2.0d0))*x*x*x
-	vpot4=(1.0d0/24.0d0)*(v4_is+v4_iv*(delta**2.0d0))*x*x*x*x
+	vpot0 = v0_is + v0_iv*(delta**2.0d0)
+	vpot1 = (v1_is + v1_iv*(delta**2.0d0))*x
+	vpot2 = (1.0d0/2.0d0)*(v2_is+v2_iv*(delta**2.0d0))*x*x
+	vpot3 = (1.0d0/6.0d0)*(v3_is+v3_iv*(delta**2.0d0))*x*x*x
+	vpot4 = (1.0d0/24.0d0)*(v4_is+v4_iv*(delta**2.0d0))*x*x*x*x
 
 	a4_is=(243.0d0*v0_is)-(81.0d0*v1_is)+((27.0d0*v2_is)/2.0d0)
 	1-((3.0d0*v3_is)/2.0d0)+((1.0d0*v4_is)/8.0d0)
 	a4_iv=(243.0d0*v0_iv)-(81.0d0*v1_iv)+((27.0d0*v2_iv)/2.0d0)
 	1-((3.0d0*v3_iv)/2.0d0)+((1.0d0*v4_iv)/8.0d0)
 
-	vpot_added=(a4_is+a4_iv*(delta**2.0d0))*(x**5.0d0)
-	1*(dexp(-b*(1.0d0+(3.0d0*x))))
-	vpot=vpot0+vpot1+vpot2+vpot3+vpot4+vpot_added
-	poten_dens=rho*vpot
+	vpot_added = (a4_is + a4_iv*(delta**2.0d0))*(x**5.0d0)
+	1*(dexp(-b*(1.0d0 + (3.0d0*x))))
+
+	vpot = vpot0 + vpot1 + vpot2 + vpot3 + vpot4 + vpot_added
+	poten_dens = rho*vpot
 
       return
 	end

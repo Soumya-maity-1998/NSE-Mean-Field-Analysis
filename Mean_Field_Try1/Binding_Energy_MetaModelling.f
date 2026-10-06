@@ -12,8 +12,9 @@
 	const_bs = 15.36563
 	const_sigma0 = 1.09191
 
-	rho_0 = 0.1604d0 
-	b = 6.93147d0 !3.0103d0 
+
+	rho_0 = 0.1604d0
+	b = 3.0103
 
 	delta = (da - (2.0d0*dz))/da
 	delta2 = delta*delta
@@ -27,11 +28,11 @@
 	x = (rho - rho_0)/(3.0d0*rho_0)
 
 
-	v0_is = para_Esat - para_Kinetic*(1.0d0 + para_kinetic_K0)
+	v0_is=para_Esat-para_Kinetic*(1.0d0+para_kinetic_K0)
 	v0_iv=para_Esym-(5.0d0/9.0d0)*para_Kinetic*(1.0d0+para_kinetic_K0+
 	13.0d0*para_kinetic_Ksym)
 
-	v1_is = -para_Kinetic*(2.0d0+5.0d0*para_kinetic_K0)
+	v1_is=-para_Kinetic*(2.0d0+5.0d0*para_kinetic_K0)
 	v1_iv=para_Lsym-(5.0d0/9.0d0)*para_Kinetic*(2.0d0+5.0d0*
 	1para_kinetic_K0+15.0d0*para_kinetic_Ksym)
 
@@ -97,9 +98,9 @@
 	dkinetic1_0=(1.0d0+(para_kinetic_K0*rho/rho_0))*f1_delta_0
 	dkinetic2_0=(para_kinetic_Ksym*rho/rho_0)*f2_delta_0
 	dkinetic_0=0.5d0*para_Kinetic*((rho/rho_0)**(2.0d0/3.0d0))*
-	1(dkinetic1_0 + dkinetic2_0)
-	d_ex = (dkinetic - dkinetic_0)*da
-	write(24, 224) temp, d_ex
+	1(dkinetic1_0+dkinetic2_0)
+	d_ex=(dkinetic-dkinetic_0)*da
+	write(24,224)temp,d_ex
 	end if
 224   format(2f9.3) 
 	vpot0=v0_is+v0_iv*(delta**2.0d0)
@@ -119,9 +120,9 @@
 	if(temp.eq.0.0d0) then
 	energy_bulk=(dkinetic+vpot)*da
 	else
-	energy_bulk_dens = -(2.0d0/3.0d0)*(ekin_n+ekin_p)+(vpot*rho)
-	1+temp*((rhop*etap) + (rhon*etan))
-	energy_bulk = (energy_bulk_dens*da)/rho
+	energy_bulk_dens=-(2.0d0/3.0d0)*(ekin_n+ekin_p)+(vpot*rho)
+	1+temp*((rhop*etap)+(rhon*etan))
+	energy_bulk=(energy_bulk_dens*da)/rho
 	end if
 
 	sigma_neu = ((2.0d0**(const_p+1.0d0))+const_bs)
@@ -136,7 +137,7 @@
 
 	seitz_factor1 = 1.5d0*(((2.0d0*rho_electron)/((1.0d0-delta)*rho))
 	1**(1.0d0/3.0d0))
-	seitz_factor2 = 0.5d0*((2.0d0*rho_electron)/((1.0d0 - delta)*rho))
+	seitz_factor2 = 0.5d0*((2.0d0*rho_electron)/((1.0d0-delta)*rho))
 	seitz = 1.0d0-(seitz_factor1-seitz_factor2)
 c	seitz=1.0d0
 	energy_coulomb = ((coul_const*seitz)/radius0)*((dz*dz)

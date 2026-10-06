@@ -1,6 +1,6 @@
 cccc  Subroutine for calculating mean field due to free proton and neutron gas
 cccc	Date-17.06.2019
-cccc  ----------------------------------------------------------------- 
+cccc  -----------------------------------------------------------------
       subroutine dmeanfield(rhop,rhon,etap,etan,temp,dkin_p,dkin_n,pot_p
 	1,pot_n,poten_dens,emassp,emassn)
 
@@ -17,7 +17,7 @@ cccc  -----------------------------------------------------------------
 	rho_0 = 0.1604d0
 	x = (rho - rho_0)/(3.0d0*rho_0)
 	delta = (rhon - rhop)/(rhon + rhop)
-	b = 6.93147d0 !3.0103d0 
+	b = 3.0103
 
 	v0_is=para_Esat-para_Kinetic*(1.0d0+para_kinetic_K0)
 	v0_iv=para_Esym-(5.0d0/9.0d0)*para_Kinetic*(1.0d0+para_kinetic_K0+
@@ -37,7 +37,7 @@ cccc  -----------------------------------------------------------------
 
 	v4_is=para_Zsat-8.0d0*para_Kinetic*(-7.0d0+5.0d0*para_kinetic_K0)
 	v4_iv=para_Zsym-(40.0d0/9.0d0)*para_Kinetic*(-7.0d0+5.0d0*
-	1para_kinetic_K0 + 15.0d0*para_kinetic_Ksym)
+	1para_kinetic_K0+15.0d0*para_kinetic_Ksym)
 
 
 	a4_is=(243.0d0*v0_is)-(81.0d0*v1_is)+((27.0d0*v2_is)/2.0d0)
@@ -47,7 +47,7 @@ cccc  -----------------------------------------------------------------
 
 cccc  Calculating the Nuclear Potential
 
-	pot1 = v0_is + v0_iv*(delta**2.0d0)
+	pot1=v0_is+v0_iv*(delta**2.0d0)
 
 	pot21=2.0d0*(v1_is+v1_iv*(delta**2.0d0))*x
 	pot22=(3.0d0/2.0d0)*(v2_is+v2_iv*(delta**2.0d0))*x*x
@@ -107,8 +107,8 @@ cccc  Calculating the Nuclear Potential
 
 	potn_eff = potn_eff1 + potn_eff2
 
-	pot_p = pot1 + pot2 + pot3 + pot4p + pot5p + potp_eff
-	pot_n = pot1 + pot2 + pot3 + pot4n + pot5n + potn_eff
+	pot_p = 0.0d0 !pot1 + pot2 + pot3 + pot4p + pot5p + potp_eff
+	pot_n = 0.0d0 !pot1 + pot2 + pot3 + pot4n + pot5n + potn_eff
 
 ccc   Calculating potential energy density
 	vpot0=v0_is+v0_iv*(delta**2.0d0)

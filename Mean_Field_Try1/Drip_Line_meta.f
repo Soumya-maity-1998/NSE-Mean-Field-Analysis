@@ -7,24 +7,20 @@ cccc	Date-02.04.2019
 	dimension yyrho(0:1000, 0:1000)
 	dimension etap_c(0:1000, 0:1000), etan_c(0:1000, 0:1000)
 
-      open(unit = 4, file = 'limz_.out', status = 'unknown')
-	
-	open(unit = 35, file = 'Bound_vs_Yp_rhoB=0.3_Temp=5.out', 
-	1status = 'unknown')
-	open(unit = 10,file = 'Density_vs_Yp_rhoB=0.3_Temp=5.out',
-     1status = 'unknown')
-	open(unit = 12, file = 'isotopic_Yp_dependence_rhoB=0.3_Temp=5_
-	1.out', status = 'unknown')
-	open(unit = 13, file = 'Hydrogen_isotope_Yp_rhoB=0.3_Temp=5.out'
-	1, status  = 'unknown') 
-	open(unit = 14, file = "Helium_isotope_Yp_rhoB=0.3_Temp=5.out", 
-	1 status = 'unknown')
-	open(unit = 15, file = 'Mass_Fraction_vs_Yp_rhoB=0.3_Temp=5.out' 
-	1, status = 'unknown')
 
-	open(unit = 150, file = 'Chemical_Potential_vs_Yp_rhoB=0.3_Temp=
-	15.out', status = 'unknown') 
-      
+	open(unit = 1111, file = 'diff_terms_to_check.out', status = 'unkn
+	1own')
+	open(unit = 1112, file = 'function_component_values.out', status = 
+	1'unknown')
+      open(unit = 1113, file = 'sum_terms.out', status = 'unknown') 
+	open(unit = 1114, file = 'sum_terms_1.out', status = 'unknown') 
+
+
+      open(unit = 4, file = 'limz_old_Coulomb.out', status = 'unknown')
+	open(unit = 10,file = 'Old_Density_vs_rhoB_Coul_yp=0.4_Tem=5MeV.ou
+     1t', status = 'unknown')
+	open(unit = 15, file = 'x_heavy1_vs_Temp_rhoB=0.1_yp=0.2.out', 
+	1status = 'unknown') 
 	open(unit = 20, file = 'BE_vs_Z_at_a=100.txt', status = 'unknown')
 
       open(unit=11,file='A0=2000_yp=0.2_Vf=3.33V0_T_dependence_Other_pro
@@ -37,9 +33,8 @@ cccc	Date-02.04.2019
 	1tion.out',status='unknown')
       open(unit=26,file='A0=2000_yp=0.2_Vf=3.33V0_T_dependence_heavy.out
 	1',status='unknown')
-
-    
-
+      open(unit=12,file='A0=2000_yp=0.2_Vf=3.33V0_T_dependence_isotopic.
+	1out',status='unknown')
 c      open(unit=21,file='A0=2000_yp=0.2_Vf=3.33V0_T=16MeV_free_energy1.o
 c	1ut',status='unknown') 
 c      open(unit=22,file='A0=2000_yp=0.2_Vf=3.33V0_T=16MeV_free_energy2.o
@@ -72,13 +67,13 @@ c	numz=28.0d0
 c
 
 
-cccc ------------------------------------------------------------------
-cccc  Maximum possible proton and neutron in a cluster are 100 and 300 
+cccc ------------------------------------------------------------------ 
+cccc  Maximum possible proton and neutron in a cluster are 100 and 300
 cccc ------------------------------------------------------------------
       numzmax = 100
 	numnmax = 300 
 cccc ------------------------------------------------------------------
-cccc  Calculating the driplines 
+cccc Calculating the driplines 
 cccc ------------------------------------------------------------------
       ndriplow(0) = 1;    ndriphigh(0) = 1
       ndriplow(1) = 0;    ndriphigh(1) = 2
@@ -94,7 +89,7 @@ cccc	Temperature and electron density are zero during dripline calculation only
 	do i = 20, 95
 	z  = a - dfloat(i) 
 	
-	call binding(a, z, temp0, rho_electron0, be1, etap, etan)
+	call binding(a, z, temp0, rho_electron0, be1,etap,etan)
 	write(20, '(i7, f10.4)') i, be1/a 
 	end do
 
@@ -104,10 +99,10 @@ cccc	Temperature and electron density are zero during dripline calculation only
       diz = dfloat(iz)
       iamin = nint(diz*1.2)
  31   amin = dfloat(iamin)
-      call binding(amin, diz, temp0, rho_electron0,res1, etapc, etanc)
+      call binding(amin,diz,temp0, rho_electron0,res1, etapc, etanc)
       daless = amin - 1.0d0
       dzless = diz - 1.0d0
-      call binding(daless, dzless, temp0,rho_electron0,res2,etapc,etanc)
+      call binding(daless,dzless,temp0,rho_electron0,res2,etapc,etanc)
        if(res1.le.res2) goto 32
       iamin = iamin + 1
       goto 31
@@ -143,37 +138,37 @@ c	write(*,*)numnmax
 	numamax = numzmax + numnmax
 
       do iz = 3, numzmax
-		ndriphigh(iz) = ndriphigh(iz)*1 !before it was 3 in place of 2
+		ndriphigh(iz) = ndriphigh(iz)*1 !before it was 3 in place of 1
       end do
 
 	
 
 cccc ------------------------------------------------------------------
-ccc   Guesss values of BetaMu 
+ccc   Guess value of BetaMu 
 cccc ------------------------------------------------------------------
-      betamuz = -0.1d0 ! at first these were -0.2 and -0.2 
-      betamun = -0.8d0
+      betamuz = -0.3d0
+      betamun = -0.3d0
 
 
 cccc ------------------------------------------------------------------
-cccc  Input Density, temperature and proton fraction 
+cccc Input Density, temperature and proton fraction 
 cccc ------------------------------------------------------------------
 
 	numa = 2000
 	dyp = 0.01d0  
-	do iyp = 0, 59  ! end points = 0, 59
-	proton_frac = 0.6d0
+	do iyp = 0, 0 ! end point = 0, 50
+	proton_frac = 0.2d0
 	proton_frac = proton_frac - dyp*dfloat(iyp) 
 	numz = nint(dfloat(numa)*proton_frac)
 	numn = numa - numz
 
-	tempi = 5.0d0
+	tempi = 10.0d0
 
-      do itemp = 1, 1
-	temp = tempi - dfloat(itemp - 1)*0.1d0
+      do itemp = 1, 91
+	temp = tempi - dfloat(itemp - 1)*0.10d0
 
-	do idens = 1, 1 !50, 10, -1
-      dens_ratio = 0.3d0
+	do idens = 1, 1 ! for single loop set idens = 10, 50 
+      dens_ratio = 0.1d0
 c	dens_ratio = 10.0d0**(-0.1d0*dfloat(idens))
 	volf_ratio = 1.0d0/dens_ratio
 cccc -------------------------------------------------------------------
@@ -188,7 +183,7 @@ cccc -------------------------------------------------------------------
 	univ3by2 = univ**1.5d0
 	univ5by2 = univ**2.5d0
 
-	numnmax3 = numnmax*1 ! CHANGE THIS ACCORDINGLY TO 1, 2 AND 4 	                          
+	numnmax3 = numnmax*1 ! Earlier it was 3 
       do i = 1, numzmax
 	do j = 1, numnmax3
 	  fee(i, j) = 0.0d0
@@ -257,7 +252,7 @@ cccc -------------------------------------------------------------------
       dn_he4 = 2.0d0
 	da_he4 = dz_he4 + dn_he4
 	call seitz_lightnuclei(da_he4,dz_he4,rho_electron,seitz_corr_he4)
-      bind_he4 = -28.296 - seitz_corr_he4
+      bind_he4=-28.296-seitz_corr_he4
       fee(2, 2) = -bind_he4/temp 
 
 	dz_he5 = 2.0d0
@@ -289,7 +284,7 @@ cccc -------------------------------------------------------------------
 	da_he8 = dz_he8 + dn_he8
       spin_he8 = 1.0
 	call seitz_lightnuclei(da_he8,dz_he8,rho_electron,seitz_corr_he8)
-      bind_he8 = -31.396 - seitz_corr_he8
+      bind_he8 = -31.396-seitz_corr_he8
       fee(2, 6) = -bind_he8/temp + dlog(spin_he8)
 
 	dz_he9 = 2.0d0
@@ -297,7 +292,7 @@ cccc -------------------------------------------------------------------
 	da_he9 = dz_he9 + dn_he9
       spin_he9 = 2.0
 	call seitz_lightnuclei(da_he9,dz_he9,rho_electron,seitz_corr_he9)
-      bind_he9 = -30.141 - seitz_corr_he9
+      bind_he9 = -30.141-seitz_corr_he9
       fee(2, 7) = -bind_he9/temp + dlog(spin_he9)
 
 	dz_he10 = 2.0d0
@@ -333,7 +328,13 @@ ccc   Iterative technique for finding BetaMun and BetaMuz
 ccc  -----------------------------------------------------
 200   continue
       iter = iter + 1
-c	write(*,*)iter
+	write(*,*)iter
+
+	if (iter.ge.201) then		!!! checked at 7:45 am on 25th August
+	betamun = betamun
+	betamuz = 0.1*betamuz
+	endif
+
 	sumn = 0.0d0;    sumz = 0.0d0
 	derivnn = 0.0d0;	derivnz = 0.0d0
 	derivzz = 0.0d0;    derivzn = 0.0d0
@@ -359,7 +360,7 @@ c	write(*,*)iter
       call Etainv(dlhsp, etap)
 
 	call dmeanfield(rhofp,rhofn,etap,etan,temp,dkin_p,dkin_n,potfp
-	1, potfn, poten_dens, emassp, emassn)
+	1,potfn,poten_dens,emassp,emassn)
 
 	else
 c	  if(iz.eq.in) then
@@ -406,12 +407,21 @@ c	  if(iz.eq.in) then
 	  fee_gas_cor = ((fee_gas_cor1+fee_gas_cor2+fee_gas_cor3)*da)/rho	
 	  fee_eff = fee(iz, in) + fee_gas_cor
 	  end if
+
 	  termsumn = univ3by2*(dmass**1.5d0)*dn*((dz+dn)**1.5d0)
 	1*exp((dn*(etan+(potfn/temp)))+(dz*(etap+(potfp/temp)))+fee_eff)
-	  termsumz=univ3by2*(dmass**1.5d0)*dz*((dz+dn)**1.5d0)
+
+	  termsumz = univ3by2*(dmass**1.5d0)*dz*((dz+dn)**1.5d0)
 	1*exp((dn*(etan+(potfn/temp)))+(dz*(etap+(potfp/temp)))+fee_eff)
+
 	  sumn = sumn + termsumn
 	  sumz = sumz + termsumz
+
+	if (temp.le.3.3) then
+	write(1113, '(1f8.2, 2i8, 2e12.4)') temp, iz, in, termsumn,
+	1termsumz
+	end if 
+
 	  termderivnn=univ3by2*(dmass**1.5d0)*(dn**2.0d0)*((dz+dn)**1.5d0)
 	1*exp((dn*(etan+(potfn/temp)))+(dz*(etap+(potfp/temp)))+fee_eff)
 	  termderivzz=univ3by2*(dmass**1.5d0)*(dz**2.0d0)*((dz+dn)**1.5d0)
@@ -420,10 +430,12 @@ c	  if(iz.eq.in) then
 	1*exp((dn*(etan+(potfn/temp)))+(dz*(etap+(potfp/temp)))+fee_eff)
 	  termderivzn=univ3by2*(dmass**1.5d0)*(dn*dz)*((dz+dn)**1.5d0)
 	1*exp((dn*(etan+(potfn/temp)))+(dz*(etap+(potfp/temp)))+fee_eff)
+
 	  derivnn = derivnn + termderivnn
 	  derivnz = derivnz + termderivnz
 	  derivzn = derivzn + termderivzn
 	  derivzz = derivzz + termderivzz
+
 	  termsum_clust=univ3by2*(dmass**1.5d0)*((dz+dn)**2.5d0)
 	1*exp((dn*(etan+(potfn/temp)))+(dz*(etap+(potfp/temp)))+fee_eff)
 
@@ -432,28 +444,46 @@ c	  if(iz.eq.in) then
 	end if
 199   continue
 	end do
+
+	if (temp.le.3.2) then
+	write(1114, '(1f8.2, 2i8, 7e15.4)') temp, iz, in, termsumn,
+	1termsumz, etan, etap, potfn, potfp, fee_eff
+	end if
+
 	end do
+
 
 	frac_clust = sum_clust/(sum_clust + rhofp + rhofn)
    	vol_av = vol - (vol_normal*frac_clust)
+
 	  funcn = dfloat(numn) - (sumn*vol_av + rhofn*vol)
 	  funcz = dfloat(numz) - (sumz*vol_av + rhofp*vol)
+
 	  derivnn = -(derivnn*vol_av + rhofn*vol)
 	  derivnz = -derivnz*vol_av
 	  derivzn = -derivzn*vol_av
 	  derivzz = -(derivzz*vol_av + rhofp*vol)
+
 	dlower = (derivnn*derivzz) - (derivnz*derivnz)
 	dupper_n = (funcn*derivzz) - (funcz*derivnz)
 	dupper_z = -(funcn*derivzn) + (funcz*derivnn)
 
+
+	if (temp.le.3.5) then 
+	write(1112, '(1f8.2, 2e12.2, 2f8.2, 4e12.2, 2f12.2)') temp, funcn,
+	1funcz, dfloat(numn), dfloat(numz), sumn, sumz, rhofn, rhofp,
+     2vol_av, vol
+	endif
+
+
+
       if (dabs(funcn).gt.1.0e-10.and.dabs(funcz).gt.1.0e-10) then
 	betamun = betamun - (dupper_n/dlower)
 	betamuz = betamuz - (dupper_z/dlower)
+	write(1111, '(1f8.2, 1i7, 2f12.4, 5e12.4)') temp, iter, betamun,
+	1betamuz, funcn, funcz, dlower, dupper_n, dupper_z
 	goto 200
 	end if
-
-	write(150, 1500) Proton_frac, betamun, betamuz
-1500	format(1f8.3, 2ES20.10) 
 
 c	write(*,*)"Here"
 554	continue
@@ -495,21 +525,21 @@ ccc----------------------------------------------------
 	  sum_neut = sum_neut + (din*yy(1, 0))
 
 	call dmeanfield(rhofp, rhofn,etap,etan,temp,dkin_p,dkin_n,potfp
-	1, potfn, poten_dens, emassp, emassn)
+	1,potfn,poten_dens,emassp,emassn)
 	else
 c	  if(iz.eq.in) then
 	  if(iz.eq.1.and.in.eq.1) then
 	  fee_eff = fee(iz, in)
-	  else if(iz.eq.1.and.in.eq.2) then	   
+	   else if(iz.eq.1.and.in.eq.2) then	   
 	  fee_eff = fee(iz, in)
 	  else if(iz.eq.1.and.in.eq.3) then	   
 	  fee_eff = fee(iz, in)
 	  else if(iz.eq.1.and.in.eq.4) then	   
 	  fee_eff=fee(iz,in)
-	    else if(iz.eq.1.and.in.eq.5) then	   
+	  else if(iz.eq.1.and.in.eq.5) then	   
 	  fee_eff=fee(iz,in)
 	  else if(iz.eq.1.and.in.eq.6) then	   
-	   fee_eff=fee(iz,in)
+	  fee_eff=fee(iz,in)
 	  else if(iz.eq.2.and.in.eq.1) then	   
 	  fee_eff=fee(iz,in)
 	  else if(iz.eq.2.and.in.eq.2) then	   
@@ -519,10 +549,10 @@ c	  if(iz.eq.in) then
 	  else if(iz.eq.2.and.in.eq.4) then	   
 	  fee_eff=fee(iz,in)
 	  else if(iz.eq.2.and.in.eq.5) then	   
-	  fee_eff = fee(iz,in)
+	   fee_eff = fee(iz,in)
 	  else if(iz.eq.2.and.in.eq.6) then	
 	  fee_eff = fee(iz, in)    
-	  else if(iz.eq.2.and.in.eq.7) then	   
+	   else if(iz.eq.2.and.in.eq.7) then	   
 	  fee_eff = fee(iz,in)
 	  else if(iz.eq.2.and.in.eq.8) then	   
 	  fee_eff = fee(iz, in)
@@ -553,7 +583,6 @@ c	  if(iz.eq.in) then
 
         yy(iz,in)=univ3by2*(dmass**1.5d0)*vol_av*((diz+din)**1.5d0)*dexp
 	1((diz*(etap+(potfp/temp)))+(din*(etan+(potfn/temp)))+fee_eff)
-
         sum_frag = sum_frag + yy(iz, in)
         sum_prot = sum_prot + (diz*yy(iz, in))
 	  sum_neut = sum_neut + (din*yy(iz, in))
@@ -563,91 +592,34 @@ c	  end if
       end do
 	end do
 
+	free_proton = 0.0;		free_neutron = 0.0 
+      hydrogen_helium = 0.0;	heavy_nucleus = 0.0
 
-	do iz = 0, numzmax
-	do in = ndriplow(iz), ndriphigh(iz)
-	ia = iz + in
-	yyrho(iz, in) = yy(iz, in)/vol
-	write(12, 112) dens_ratio, proton_frac, temp, iz, ia, yy(iz, in)
-	end do
-	end do
+      do iz = 0, numzmax 
+          if (iz.eq.0) then 
+              free_neutron = free_neutron + yy(0, 1)
+          elseif (iz.eq.1) then 
+              free_proton = free_proton + yy(1, 0) 
+              do in = 1, ndriphigh(iz)
+                  hydrogen_helium = hydrogen_helium + yy(iz, in) 
+              end do 
+          elseif (iz.eq.2) then 
+              do in = ndriplow(iz), ndriphigh(iz)
+                  hydrogen_helium = hydrogen_helium + yy(iz, in)
+              end do 
+          elseif (iz.ge.3) then 
+              do in = ndriplow(iz), ndriphigh(iz) 
+                  if (in.gt.numnmax) goto 250 
+                  heavy_nucleus = heavy_nucleus + yy(iz, in) 
+              end do 
+250       continue
+          end if
+      end do
 
-112   format(3f8.3, 2i5, 1e12.5)
-
-
-	H2 = 0.0d0;		He4 = 0.0d0 
-	H3 = 0.0d0;		He6 = 0.0d0 
-	H5 = 0.0d0;		He8 = 0.0d0 
-	H7 = 0.0d0;		He10 = 0.0d0 
-
-	do iz = 1, 2
-		if (iz.eq.1) then 
-			do in = ndriplow(iz), ndriphigh(iz) 
-				if (in.eq.1) then
-					H2 = H2 + yyrho(iz, in)
-				else if (in.eq.2) then
-					H3 = H3 + yyrho(iz, in) 
-				else if (in.eq.4) then 
-					H5 = H5 + yyrho(iz, in) 
-				else if (in.eq.6) then 
-					H7 = H7 + yyrho(iz, in) 
-				end if 
-			end do 
-		else
-			do in = ndriplow(iz), ndriphigh(iz) 
-				if (in.eq.2) then 
-					He4 = He4 + yyrho(iz, in) 
-				else if (in.eq.4) then
-					He6 = He6 + yyrho(iz, in) 
-				else if (in.eq.6) then 
-					He8 = He8 + yyrho(iz, in) 
-				else if (in.eq.8) then 
-					He10 = He10 + yyrho(iz, in) 
-				end if 
-			end do 
-		end if 
-	end do 
-
-
-	write(13, 111) Proton_frac, H2, H3, H5, H7 
-	write(14, 111) Proton_frac, He4, He6, He8, He10 
-
-111	format(5e12.6)			 
-
-
-	! To Calculate bound oservables 
-	
-	sum0 = 0.0d0 
-	sum1 = 0.0d0; sum2 = 0.0d0; sum3 = 0.0d0 
-
-	do iz = 1, numzmax
-	do in = ndriplow(iz), ndriphigh(iz) 
-	if (in.ge.1) then 
-	sum0 = sum0 + yyrho(iz, in) 
-	end if
-	end do 
-	end do 
-
-	do iz = 1, numzmax
-	do in = ndriplow(iz), ndriphigh(iz) 
-	if (in.ge.1) then
-	ia = iz + in  
-	sum1 = sum1 + dfloat(iz)*yyrho(iz, in)
-	sum2 = sum2 + dfloat(ia)*yyrho(iz, in) 
-	sum3 = sum3 + (dfloat(ia - 2.0d0*iz)/dfloat(ia))*yyrho(iz, in)
-	end if   
-	end do 
-	end do
-
-	z_bound = sum1/sum0 
-	a_bound = sum2/sum0
-	aI_bound = sum3/sum0 
-
-	write(35, 123) Proton_frac, z_bound, a_bound, aI_bound 
-123	format(4f12.6) 
-
-
-	sum1 = 0.0; sum2 = 0.0	
+	write(10, 1000) dens_ratio, free_proton/vol, free_neutron/vol,
+	1hydrogen_helium/vol, heavy_nucleus/vol
+     
+      sum1 = 0.0; sum2 = 0.0
 	sumH = 0.0; sumHe = 0.0 
 	sumn = 0.0; sump = 0.0
 
@@ -682,43 +654,10 @@ c	  end if
 	xlight_heavy = (sumH + sumHe)/sum2 
 	x_heavy = sum1/sum2 
 
-	write(15, 1000) Proton_frac, xp_heavy, xn_heavy, xlight_heavy, 
+	write(15, 1000) proton_frac, xp_heavy, xn_heavy, xlight_heavy, 
 	1x_heavy
 
-
-	free_proton = 0.0;		free_neutron = 0.0 
-      hydrogen_helium = 0.0;	heavy_nucleus = 0.0
-
-      do iz = 0, numzmax 
-          if (iz.eq.0) then 								   
-              free_neutron = free_neutron + yy(0, 1)
-          elseif (iz.eq.1) then 
-              free_proton = free_proton + yy(1, 0) 
-              do in = 1, ndriphigh(iz)
-                  hydrogen_helium = hydrogen_helium + yy(iz, in) 
-              end do 
-          elseif (iz.eq.2) then 
-              do in = ndriplow(iz), ndriphigh(iz)
-                  hydrogen_helium = hydrogen_helium + yy(iz, in)
-              end do 
-          elseif (iz.ge.3) then 
-              do in = ndriplow(iz), ndriphigh(iz) 
-                  if (in.gt.numnmax) goto 250 
-                  heavy_nucleus = heavy_nucleus + yy(iz, in) 
-              end do 
-250       continue
-          end if				  
-      end do
-
-	write(10, 1000) Proton_frac, free_proton/vol, free_neutron/vol,
-	1hydrogen_helium/vol, heavy_nucleus/vol
-                            
-
-
 1000  format(5ES20.10)
-
-
-	goto 4000 ! will be calculated in a different code.
 
 	sum_fragz = 0.0d0
       do iz = 0, numzmax
@@ -744,6 +683,15 @@ c	  end if
 	end do
       write(*, *)
 
+      do iz = 0, numzmax
+	do in = ndriplow(iz), ndriphigh(iz)
+	ia = iz + in
+	yyrho(iz, in) = yy(iz,in)/vol
+	write(12, 112) dens_ratio, proton_frac, temp, iz, ia, yy(iz, in)
+	end do
+	end do
+112   format(3f8.3, 2i5, e12.5)
+
 	rhosum = 0.0d0
 	aboundrhosum = 0.0d0
       do iz = 0, numzmax
@@ -760,14 +708,14 @@ c	  end if
 	end do
 	end do
 	abound = aboundrhosum/rhosum
-	dmass_frac_Alpha4 = (4.0d0*yy(2, 2))/2000.0d0
-	dmass_frac_Alpha8 = (8.0d0*yy(2, 6))/2000.0d0
-	dmass_frac_C12 = (12.0d0*yy(6, 6))/2000.0d0
-	dmass_frac_C15 = (15.0d0*yy(6, 9))/2000.0d0
-	dmass_frac_C18 = (18.0d0*yy(6, 12))/2000.0d0
-	dmass_frac_O16 = (16.0d0*yy(8, 8))/2000.0d0
-	dmass_frac_O20 = (20.0d0*yy(8, 12))/2000.0d0
-	dmass_frac_O24 = (24.0d0*yy(8, 16))/2000.0d0
+	dmass_frac_Alpha4 = (4.0d0*yy(2,2))/2000.0d0
+	dmass_frac_Alpha8 = (8.0d0*yy(2,6))/2000.0d0
+	dmass_frac_C12 = (12.0d0*yy(6,6))/2000.0d0
+	dmass_frac_C15 = (15.0d0*yy(6,9))/2000.0d0
+	dmass_frac_C18 = (18.0d0*yy(6,12))/2000.0d0
+	dmass_frac_O16 = (16.0d0*yy(8,8))/2000.0d0
+	dmass_frac_O20 = (20.0d0*yy(8,12))/2000.0d0
+	dmass_frac_O24 = (24.0d0*yy(8,16))/2000.0d0
 
 	rhopsum = 0.0d0
 	zboundrhosum = 0.0d0
@@ -775,12 +723,12 @@ c	  end if
 	do in = ndriplow(iz), ndriphigh(iz)
 	diz = dfloat(iz)
 	rhopsum = rhopsum + yyrho(iz, in)
-	if (iz.eq.1.and.in.eq.0) then
+	if(iz.eq.1.and.in.eq.0) then
 	zboundrhosum = zboundrhosum 
 	else if(iz.eq.0.and.in.eq.1) then
 	zboundrhosum = zboundrhosum
 	else
-	zboundrhosum = zboundrhosum + (diz*yyrho(iz, in))
+	zboundrhosum = zboundrhosum + (diz*yyrho(iz,in))
 	end if
 	end do
 	end do
@@ -794,35 +742,33 @@ c	  end if
 	do in = ndriplow(iz), ndriphigh(iz)
 	  if(iz.eq.0) then
         diz = dfloat(iz)
-	  xheavy_deno = xheavy_deno + (diz*yyrho(iz, in))
+	  xheavy_deno = xheavy_deno + (diz*yyrho(iz,in))
 	  else if(iz.eq.1) then
 	  diz = dfloat(iz)
-	  xheavy_deno = xheavy_deno + (diz*yyrho(iz, in))
+	  xheavy_deno = xheavy_deno + (diz*yyrho(iz,in))
 	  else if(iz.eq.2) then	   
 	  diz = dfloat(iz)
-	  xheavy_deno = xheavy_deno + (diz*yyrho(iz, in))
+	  xheavy_deno = xheavy_deno + (diz*yyrho(iz,in))
 	  else
 	  diz = dfloat(iz)
-	  zheavy_neu = zheavy_neu + (diz*yyrho(iz, in))
-	  zheavy_deno = zheavy_deno + yyrho(iz, in)	
-	  xheavy_neu = xheavy_neu + (diz*yyrho(iz, in))
-	  xheavy_deno = xheavy_deno + (diz*yyrho(iz, in))
+	  zheavy_neu = zheavy_neu + (diz*yyrho(iz,in))
+	  zheavy_deno = zheavy_deno + yyrho(iz,in)	
+	  xheavy_neu = xheavy_neu + (diz*yyrho(iz,in))
+	  xheavy_deno = xheavy_deno + (diz*yyrho(iz,in))
 	  end if
 	end do
 	end do
-	if (zheavy_deno.gt.0.0d0) then
+	if(zheavy_deno.gt.0.0d0) then
 	zheavy = zheavy_neu/zheavy_deno
 	else
 	zheavy = 0.0d0
 	end if
 
-	if (xheavy_deno.gt.0.0d0) then
+	if(xheavy_deno.gt.0.0d0) then
 	xheavy = xheavy_neu/xheavy_deno
 	else
 	xheavy = 0.0d0
 	end if
-
-4000	continue
 
 
 c	write(*,*)sum_frag,sum_fragz,sum_fraga
@@ -830,35 +776,24 @@ c	write(*,*)sum_prot,sum_neut
 
 	betamuz_print = etap + (potfp/temp)
 	betamun_print = etan + (potfn/temp)
-
-	write(*, 122) dens_ratio, proton_frac, temp, iter
-	1, sum_prot, sum_neut
-
-	goto 3000 ! dont want to write these files for now.
-
-	write(11, 121) densbyrho0, proton_frac, temp, betamuz_print
-	1,betamun_print, rhofp, rhofn, abound, potfp, potfn, vol_av_ratio
-	write(25, 125) densbyrho0, proton_frac, temp, dmass_frac_Alpha4
-	1,dmass_frac_Alpha8, dmass_frac_C12, dmass_frac_C15, dmass_frac_C18
-     2,dmass_frac_O16, dmass_frac_O20, dmass_frac_O24
-	write(26, 121) densbyrho0, proton_frac, temp, abound,zbound,xheavy
-	1, zheavy
-
-3000	continue 
-
+	write(*, 122) densbyrho0, proton_frac, temp, iter
+	1,sum_prot,sum_neut
+	write(11, 121)densbyrho0,proton_frac,temp,betamuz_print
+	1,betamun_print,rhofp,rhofn,abound,potfp,potfn,vol_av_ratio
+	write(25, 125)densbyrho0,proton_frac,temp,dmass_frac_Alpha4
+	1,dmass_frac_Alpha8,dmass_frac_C12,dmass_frac_C15,dmass_frac_C18
+     2,dmass_frac_O16,dmass_frac_O20,dmass_frac_O24
+	write(26, 121)densbyrho0,proton_frac,temp,abound,zbound,xheavy
+	1,zheavy
 c	write(12,121)temp,betamuz_print,etap,potfpbytemp
 c	1,betamun_print,etan,potfnbytemp
-
-122   format(3f9.4, 1i7, 2f11.5)
+122   format(3f9.4, i7, 2f11.5)
 121   format(11f11.6)
 125   format(3f11.6, 8e12.5)
 	iprint = 0
-
 	end do
 	end do
 	end do 
-
 999   continue
-
       stop
       end

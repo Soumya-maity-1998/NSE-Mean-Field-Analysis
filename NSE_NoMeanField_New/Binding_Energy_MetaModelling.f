@@ -3,7 +3,7 @@
 	use SLy5_Model_parameters
       implicit real *8 (a-h, o-z)
 
-	pi = 22.0d0/7.0d0
+	pi = 3.14159d0
 	coul_const = 0.864d0	
 	num_charge = nint(dz)
 	num_mass = nint(da)
